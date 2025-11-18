@@ -1,31 +1,40 @@
 package com.dh.DentalClinicMVC.controller;
 
-import org.springframework.ui.Model;
-import com.dh.DentalClinicMVC.model.Patient;
-import com.dh.DentalClinicMVC.service.PatientService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
-@Controller
+import com.dh.DentalClinicMVC.model.Patient;
+import com.dh.DentalClinicMVC.service.IPatientService;
+import com.dh.DentalClinicMVC.service.impl.PatientServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
 @RequestMapping("/patient")
 public class PatientController {
 
-    private PatientService patientService;
+    private IPatientService patientService;
 
     @Autowired
-    public PatientController(PatientService patientService) {
+    public PatientController(IPatientService patientService) {
         this.patientService = patientService;
     }
 
+    //AGREGAR UN PACIENTE
+    @PostMapping
+    public Patient save(@RequestBody Patient patient) {
+        return patientService.save(patient);
+    }
+
+    //EDITAR UN PACIENTE
+    @PutMapping
+    public void update(@RequestBody Patient patient) {
+        patientService.update(patient);
+    }
+
     @GetMapping
-    public String findPatientByEmail(Model model,@RequestParam("email") String email) {
-        Patient patient = patientService.findByEmail(email);
-        model.addAttribute("firstName", patient.getFirstName());
-        model.addAttribute("lastName", patient.getLastName());
-        return "index";
+    public List<Patient> findAll() {
+        return patientService.findAll();
     }
 
 }

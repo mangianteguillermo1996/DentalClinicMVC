@@ -1,42 +1,49 @@
 package com.dh.DentalClinicMVC.model;
 
-import java.time.LocalDate;
+import jakarta.persistence.*;
 
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
+
+@Entity
+@Table(name = "patients")
 public class Patient {
 
-    private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "patient_id")
+    private Long id;
+
+    @Column(name = "first_name")
     private String firstName;
+
+    @Column(name = "last_name")
     private String lastName;
+
+    @Column(name = "email")
     private String email;
+
+    @Column(name = "card_identity")
     private Integer cardIdentity;
+
+    @Column(name = "admission_of_date")
     private LocalDate admissionOfDate;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "address_id")
     private Address address;
 
+    @OneToMany(mappedBy = "patient", cascade = CascadeType.ALL)
+    private Set<Appointment> appointment = new HashSet<>();
 
-    public Patient(Integer id, String firstName, String lastName, String email, Integer cardIdentity, LocalDate admissionOfDate, Address address) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.cardIdentity = cardIdentity;
-        this.admissionOfDate = admissionOfDate;
-        this.address = address;
-    }
+    public Patient() {}
 
-    public Patient(String firstName, String lastName, String email, Integer cardIdentity, LocalDate admissionOfDate, Address address) {
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.email = email;
-        this.cardIdentity = cardIdentity;
-        this.admissionOfDate = admissionOfDate;
-        this.address = address;
-    }
-
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -86,6 +93,14 @@ public class Patient {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Set<Appointment> getAppointment() {
+        return appointment;
+    }
+
+    public void setAppointment(Set<Appointment> appointment) {
+        this.appointment = appointment;
     }
 }
 
