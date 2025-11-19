@@ -11,7 +11,7 @@ public interface IAppointmentService {
     AppointmentDTO save (AppointmentDTO appointmentDTO);
     Optional<AppointmentDTO> findById(Long id);
     AppointmentDTO update(AppointmentDTO appointmentDTO) throws Exception;
-    void delete(Long id);
+    Optional<AppointmentDTO> delete(Long id);
     List<AppointmentDTO> findAll();
 
 }

@@ -2,6 +2,7 @@ package com.dh.DentalClinicMVC.controller;
 
 import com.dh.DentalClinicMVC.dto.AppointmentDTO;
 import com.dh.DentalClinicMVC.entity.Appointment;
+import com.dh.DentalClinicMVC.exception.ResourceNotFoundException;
 import com.dh.DentalClinicMVC.service.IAppointmentService;
 import com.dh.DentalClinicMVC.service.IDentistService;
 import com.dh.DentalClinicMVC.service.IPatientService;
@@ -73,15 +74,9 @@ public class AppointmentController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable Long id) {
-        ResponseEntity<String> response;
-        if (dentistService.findById(id).isPresent()){
-            appointmentService.delete(id);
-            response = ResponseEntity.ok("Turno eliminado exitosamente");
-        } else   {
-            response = ResponseEntity.notFound().build();
-        }
-        return response;
+    public ResponseEntity<String> delete(@PathVariable Long id) throws ResourceNotFoundException {
+        appointmentService.delete(id);
+        return ResponseEntity.ok("Turno eliminado exitosamente");
     }
 
 }

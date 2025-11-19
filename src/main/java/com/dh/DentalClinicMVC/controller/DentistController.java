@@ -1,6 +1,7 @@
 package com.dh.DentalClinicMVC.controller;
 
 import com.dh.DentalClinicMVC.entity.Dentist;
+import com.dh.DentalClinicMVC.exception.ResourceNotFoundException;
 import com.dh.DentalClinicMVC.service.IDentistService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -52,17 +53,9 @@ public class   DentistController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> delete(@PathVariable Long id) {
-        ResponseEntity<String> response;
-        Optional<Dentist> dentistToDelete = iDentistService.findById(id);
-
-        if (dentistToDelete.isPresent()) {
-            iDentistService.delete(id);
-            response = ResponseEntity.ok("Odontologo eliminado");
-        } else {
-            response = ResponseEntity.notFound().build();
-        }
-        return response;
+    public ResponseEntity<String> delete(@PathVariable Long id) throws ResourceNotFoundException {
+        iDentistService.delete(id);
+        return ResponseEntity.ok("Odontologo eliminado");
     }
 
     @GetMapping
