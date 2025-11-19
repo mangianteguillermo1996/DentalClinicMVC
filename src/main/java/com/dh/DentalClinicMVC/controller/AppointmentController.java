@@ -1,6 +1,7 @@
 package com.dh.DentalClinicMVC.controller;
 
-import com.dh.DentalClinicMVC.model.Appointment;
+import com.dh.DentalClinicMVC.dto.AppointmentDTO;
+import com.dh.DentalClinicMVC.entity.Appointment;
 import com.dh.DentalClinicMVC.service.IAppointmentService;
 import com.dh.DentalClinicMVC.service.IDentistService;
 import com.dh.DentalClinicMVC.service.IPatientService;
@@ -28,18 +29,18 @@ public class AppointmentController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Appointment>> findAll() {
+    public ResponseEntity<List<AppointmentDTO>> findAll() {
         return ResponseEntity.ok(appointmentService.findAll());
     }
 
     @PostMapping
-    public ResponseEntity<Appointment> save(@RequestBody Appointment appointment) {
+    public ResponseEntity<AppointmentDTO> save(@RequestBody AppointmentDTO appointmentDTO) {
 
-        ResponseEntity<Appointment> response;
+        ResponseEntity<AppointmentDTO> response;
 
-        if (dentistService.findById(appointment.getDentist().getId()).isPresent()
-        && patientService.findById(appointment.getPatient().getId()).isPresent()) {
-            response = ResponseEntity.ok(appointmentService.save(appointment));
+        if (dentistService.findById(appointmentDTO.getDentistId()).isPresent()
+        && patientService.findById(appointmentDTO.getPatientId()).isPresent()) {
+            response = ResponseEntity.ok(appointmentService.save(appointmentDTO));
         } else {
             response = ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
@@ -47,8 +48,8 @@ public class AppointmentController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Appointment> findById(@PathVariable Long id) {
-        Optional<Appointment> appointmentToLookFor = appointmentService.findById(id);
+    public ResponseEntity<AppointmentDTO> findById(@PathVariable Long id) {
+        Optional<AppointmentDTO> appointmentToLookFor = appointmentService.findById(id);
 
         if (appointmentToLookFor.isPresent()) {
             return ResponseEntity.ok(appointmentToLookFor.get());
@@ -58,13 +59,12 @@ public class AppointmentController {
     }
 
     @PutMapping
-    public ResponseEntity<String> update(@RequestBody Appointment appointment) {
-        ResponseEntity<String> response;
+    public ResponseEntity<AppointmentDTO> update(@RequestBody AppointmentDTO appointmentDTO) throws Exception {
+        ResponseEntity<AppointmentDTO> response;
 
-        if (dentistService.findById(appointment.getDentist().getId()).isPresent()
-           && patientService.findById(appointment.getPatient().getId()).isPresent()) {
-            appointmentService.update(appointment);
-            response = ResponseEntity.ok("Turno actualizado exitosamente");
+        if (dentistService.findById(appointmentDTO.getDentistId()).isPresent()
+           && patientService.findById(appointmentDTO.getPatientId()).isPresent()) {
+            response = ResponseEntity.ok(appointmentService.update(appointmentDTO));
         } else  {
             response = ResponseEntity.notFound().build();
         }
