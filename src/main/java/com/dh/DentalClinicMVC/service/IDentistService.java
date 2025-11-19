@@ -12,5 +12,6 @@ public interface IDentistService {
     void update(Dentist dentist);
     void delete(Long id);
     List<Dentist> findAll();
+    Optional<Dentist> findByRegistration(Integer registration);
 
 }
